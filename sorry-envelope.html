@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>open me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#fff4e0;
+    --bg2:#ffe1ec;
+    --ink:#3a2f45;
+    --ink-soft:#6b5f78;
+    --accent:#ff8a5b;
+    --accent2:#6ec6b0;
+    --paper:#ffffff;
+    --paper-shade:#fff0e6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    padding:24px;
+  }
+
+  .scene{ position:relative; width:100%; max-width:380px; }
+
+  /* ---------- ENVELOPE ---------- */
+  .envelope-wrap{
+    display:flex; flex-direction:column; align-items:center; gap:16px;
+    transition:opacity .4s ease;
+  }
+  .envelope-wrap.hidden{
+    opacity:0; pointer-events:none; position:absolute; inset:0;
+  }
+
+  .envelope{
+    position:relative;
+    width:220px; height:150px;
+    cursor:pointer;
+    filter:drop-shadow(0 16px 26px rgba(80,50,40,.25));
+  }
+  .env-body{
+    position:absolute; inset:0;
+    background:var(--paper);
+    border-radius:10px;
+  }
+  .env-shade{
+    position:absolute; inset:0;
+    clip-path:polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+    background:rgba(255,138,91,.08);
+    border-radius:10px;
+  }
+  .env-flap{
+    position:absolute; top:0; left:0; right:0; height:80px;
+    background:var(--paper-shade);
+    clip-path:polygon(0 0, 100% 0, 50% 92%);
+    border-radius:10px 10px 0 0;
+    transform-origin:top center;
+    transition:transform .55s cubic-bezier(.6,0,.4,1);
+    z-index:3;
+  }
+  .heart{
+    position:absolute; top:58px; left:50%;
+    transform:translate(-50%,0);
+    width:38px; height:38px;
+    background:var(--accent);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+    z-index:4;
+    box-shadow:0 3px 6px rgba(0,0,0,.2);
+    transition:opacity .3s ease, transform .3s ease;
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ transform:translate(-50%,0) scale(1); }
+    50%{ transform:translate(-50%,0) scale(1.12); }
+  }
+  .envelope.open .env-flap{ transform:rotateX(180deg); }
+  .envelope.open .heart{ opacity:0; transform:translate(-50%,-8px) scale(.6); animation:none; }
+
+  .prompt{
+    font-family:'Baloo 2',sans-serif;
+    font-size:16px;
+    color:#5c4b6e;
+    text-align:center;
+  }
+
+  /* ---------- LETTER ---------- */
+  .letter-wrap{
+    opacity:0; transform:translateY(20px) scale(.96);
+    transition:opacity .6s ease .1s, transform .6s ease .1s;
+    pointer-events:none;
+  }
+  .letter-wrap.visible{
+    opacity:1; transform:translateY(0) scale(1);
+    pointer-events:auto;
+  }
+
+  .letter{
+    background:var(--paper);
+    border-radius:22px;
+    padding:36px 28px 30px;
+    text-align:center;
+    box-shadow:0 22px 50px rgba(80,50,40,.2);
+  }
+
+  .quote{
+    font-family:'Baloo 2',sans-serif;
+    font-size:19px;
+    line-height:1.5;
+    color:var(--ink);
+    margin:0 0 18px;
+  }
+
+  .sorry{
+    font-family:'Baloo 2',sans-serif;
+    font-size:26px;
+    color:var(--accent);
+    margin:0 0 4px;
+  }
+
+  .small{
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .env-flap, .letter-wrap, .heart{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+
+  <div class="envelope-wrap" id="envelopeWrap">
+    <div class="envelope" id="envelope">
+      <div class="env-body"></div>
+      <div class="env-shade"></div>
+      <div class="env-flap"></div>
+      <div class="heart">💌</div>
+    </div>
+    <p class="prompt">tap to open</p>
+  </div>
+
+  <div class="letter-wrap" id="letterWrap">
+    <div class="letter">
+      <p class="quote">"A good apology is like a good bridge — small, sturdy, and it gets you back to each other."</p>
+      <p class="sorry">I'm sorry 🙏</p>
+      <p class="small">let's be okay again?</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const envelope = document.getElementById('envelope');
+  const envelopeWrap = document.getElementById('envelopeWrap');
+  const letterWrap = document.getElementById('letterWrap');
+
+  envelope.addEventListener('click', () => {
+    envelope.classList.add('open');
+    setTimeout(() => {
+      envelopeWrap.classList.add('hidden');
+      letterWrap.classList.add('visible');
+    }, 450);
+  });
+</script>
+
+</body>
+</html>
